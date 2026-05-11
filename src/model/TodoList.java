@@ -15,8 +15,13 @@ public abstract class TodoList {
      * Konstruktor setzt den Titel der Liste
      */
     public TodoList(String title, String type) {
-        this.title = title;
-        this.type = type;
+
+        // Titel sauber speichern und null vermeiden.
+        this.title = cleanTitle(title);
+
+        // Typ sauber speichern und null vermeiden.
+        this.type = cleanType(type);
+
     }
 
     /**
@@ -34,6 +39,38 @@ public abstract class TodoList {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+
+        // Titel sauber speichern und null vermeiden.
+        this.title = cleanTitle(title);
+    }
+
+    /**
+     * Bereitet Titelwerte für TodoListen auf.
+     */
+    private String cleanTitle(String title) {
+
+        // Null-Werte werden als leerer Titel gespeichert,
+        // damit später keine NullPointerException entsteht.
+        if (title == null) {
+            return "";
+        }
+
+        // Leerzeichen am Anfang und Ende entfernen.
+        return title.trim();
+    }
+
+    /**
+     * Bereitet Typwerte für TodoListen auf.
+     */
+    private String cleanType(String type) {
+
+        // Null-Werte werden als leerer Typ gespeichert,
+        // damit später keine NullPointerException entsteht.
+        if (type == null) {
+            return "";
+        }
+
+        // Leerzeichen am Anfang und Ende entfernen.
+        return type.trim();
     }
 }
