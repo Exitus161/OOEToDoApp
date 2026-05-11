@@ -17,8 +17,14 @@ import java.io.File;
  */
 public class PersistenceManager {
 
-    // Speicherort der JSON-Datei
-    private static final String FILE_PATH = "resources/todos.json";
+    // Ordner, in dem die JSON-Datei im Projekt gespeichert wird.
+    private static final String RESOURCE_DIRECTORY = "resources";
+
+    // Name der JSON-Datei mit den gespeicherten Todo-Daten.
+    private static final String FILE_NAME = "todos.json";
+
+    // Vollständiger Speicherpfad innerhalb des Projekts.
+    private static final String FILE_PATH = RESOURCE_DIRECTORY + File.separator + FILE_NAME;
 
     // Gson Objekt
     private Gson gson;
