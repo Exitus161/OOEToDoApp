@@ -319,6 +319,9 @@ public class GUI {
 
         refreshTodoPanel();
 
+        // Fenster mittig auf dem Bildschirm platzieren.
+        frame.setLocationRelativeTo(null);
+
         frame.setVisible(true);
     }
 
