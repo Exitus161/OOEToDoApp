@@ -180,6 +180,10 @@ public class GUI {
 
             if (!e.getValueIsAdjusting()) {
 
+                // Vor dem Wechsel der Liste wird der aktuelle Stand gespeichert.
+                // Das ist besonders für Freitext-Listen wichtig.
+                controller.save();
+
                 int selectedIndex = listOverview.getSelectedIndex();
 
                 if (selectedIndex >= 0) {
@@ -191,6 +195,7 @@ public class GUI {
                 }
             }
         });
+
 
         // -----------------------------
         // FRAME ZUSAMMENSETZEN
@@ -489,12 +494,10 @@ public class GUI {
 
                     }
 
-                    // Model aktualisieren
                     // Die GUI ersetzt die Einträge nicht direkt,
                     // sondern gibt die neue Textliste an den Controller weiter.
+                    // Gespeichert wird später gesammelt, z. B. beim Beenden der App.
                     controller.replaceTextEntries(textList, entries);
-
-                    controller.save();
                 }
 
                 @Override
