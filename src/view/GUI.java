@@ -300,6 +300,20 @@ public class GUI {
 
                 checkBox.setSelected(item.isCompleted());
 
+                // Erledigte Tasks hervorheben
+                if (item.isCompleted()) {
+
+                    checkBox.setForeground(Color.GRAY);
+
+                    Font oldFont = checkBox.getFont();
+
+                    checkBox.setFont(
+                            oldFont.deriveFont(
+                                    oldFont.getStyle() | Font.ITALIC
+                            )
+                    );
+                }
+
                 // Checkbox Event
                 checkBox.addActionListener(e -> {
 
