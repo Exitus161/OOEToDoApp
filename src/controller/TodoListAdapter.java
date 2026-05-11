@@ -32,6 +32,7 @@ public class TodoListAdapter implements JsonDeserializer<TodoList> {
             throw new JsonParseException("Kein type-Feld gefunden.");
         }
 
+        // Das type-Feld entscheidet, welche konkrete Listenklasse erzeugt wird.
         String type = typeElement.getAsString();
 
         // Checkbox-Liste

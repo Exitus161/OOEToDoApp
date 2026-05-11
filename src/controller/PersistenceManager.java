@@ -97,12 +97,12 @@ public class PersistenceManager {
 
         } catch (IOException e) {
 
-        // Speichern ist fehlgeschlagen.
-        // Die Fehlermeldung wird in der Konsole ausgegeben.
-        System.err.println("Todo data could not be saved.");
-        System.err.println("Cause: " + e.getMessage());
+            // Speichern ist fehlgeschlagen.
+            // Die Fehlermeldung wird in der Konsole ausgegeben.
+            System.err.println("Todo data could not be saved.");
+            System.err.println("Cause: " + e.getMessage());
+        }
     }
-}
 
     /**
      * Lädt die App-Daten aus der JSON-Datei.
