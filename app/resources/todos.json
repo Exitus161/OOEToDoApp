@@ -2,10 +2,32 @@
   "lists": [
     {
       "entries": [
-        "TESTSEFDSFAas"
+        "TESTTESTTESET"
       ],
       "title": "Test",
       "type": "text"
+    },
+    {
+      "items": [
+        {
+          "text": "Bier",
+          "completed": false
+        },
+        {
+          "text": "Wasser",
+          "completed": false
+        },
+        {
+          "text": "Milch",
+          "completed": true
+        },
+        {
+          "text": "Eier",
+          "completed": true
+        }
+      ],
+      "title": "einkaufsliste",
+      "type": "checkbox"
     }
   ]
 }

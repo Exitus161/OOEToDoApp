@@ -78,15 +78,38 @@ public class GUI {
 
             if (selectedIndex >= 0) {
 
+                // Die aktuell ausgewählte Liste wird anhand des Index geholt.
                 TodoList list = app.getLists().get(selectedIndex);
 
+                // Die Liste wird über den Controller entfernt.
                 controller.removeList(list);
 
-                currentList = null;
-
+                // Linke Listenübersicht nach dem Löschen aktualisieren.
                 refreshListOverview();
-                refreshTodoPanel();
 
+                // Wenn nach dem Löschen noch Listen vorhanden sind,
+                // wird automatisch eine sinnvolle nächste Liste ausgewählt.
+                if (!app.getLists().isEmpty()) {
+
+                    // Wenn die letzte Liste gelöscht wurde,
+                    // nehmen wir den neuen letzten Index.
+                    int nextIndex = Math.min(selectedIndex, app.getLists().size() - 1);
+
+                    // Die nächste Liste wird links ausgewählt.
+                    // Dadurch wird auch der ListSelectionListener ausgelöst.
+                    listOverview.setSelectedIndex(nextIndex);
+
+                } else {
+
+                    // Wenn keine Liste mehr vorhanden ist,
+                    // gibt es auch keine aktuelle Liste mehr.
+                    currentList = null;
+
+                    // Rechte Ansicht auf "Keine Liste ausgewählt" zurücksetzen.
+                    refreshTodoPanel();
+                }
+
+                // Neuen Zustand speichern.
                 controller.save();
             }
         });
