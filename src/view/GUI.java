@@ -149,6 +149,44 @@ public class GUI {
         popupMenu.add(deleteItem);
         popupMenu.add(renameItem);
 
+        // Vor dem Anzeigen des Rechtsklick-Menüs wird die Liste ausgewählt,
+        // auf die der Benutzer tatsächlich geklickt hat.
+        popupMenu.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e) {
+
+                // Mausposition innerhalb der Listenübersicht holen.
+                Point mousePosition = listOverview.getMousePosition();
+
+                // Falls keine Mausposition verfügbar ist,
+                // kann keine Liste gezielt ausgewählt werden.
+                if (mousePosition == null) {
+                    return;
+                }
+
+                // Index der Liste berechnen, die sich unter der Maus befindet.
+                int index = listOverview.locationToIndex(mousePosition);
+
+                // Nur gültige Indizes auswählen.
+                if (index >= 0) {
+                    listOverview.setSelectedIndex(index);
+                }
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e) {
+
+                // Nicht benötigt.
+            }
+
+            @Override
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e) {
+
+                // Nicht benötigt.
+            }
+        });
+
         // Rechtsklick aktivieren
         listOverview.setComponentPopupMenu(popupMenu);
 
