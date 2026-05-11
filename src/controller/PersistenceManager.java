@@ -2,6 +2,8 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+
 import model.TodoApp;
 import model.TodoList;
 
@@ -78,15 +80,24 @@ public class PersistenceManager {
     }
 
     /**
-     * Lädt die App-Daten aus der JSON-Datei
+     * Lädt die App-Daten aus der JSON-Datei.
+     * Falls die Datei fehlt, leer oder beschädigt ist,
+     * wird eine neue leere TodoApp zurückgegeben.
+     */
+    /**
+     * Lädt die App-Daten aus der JSON-Datei.
+     * Falls die Datei fehlt, leer oder beschädigt ist,
+     * wird eine neue leere TodoApp zurückgegeben.
      */
     public TodoApp load() {
 
         try (FileReader reader = new FileReader(FILE_PATH)) {
 
+            // JSON-Datei in ein TodoApp-Objekt umwandeln.
             TodoApp app = gson.fromJson(reader, TodoApp.class);
 
-            // Falls Datei leer ist
+            // Wenn die Datei leer ist, liefert Gson null zurück.
+            // In diesem Fall starten wir mit einer leeren App.
             if (app == null) {
                 return new TodoApp();
             }
@@ -95,9 +106,12 @@ public class PersistenceManager {
 
             return app;
 
-        } catch (IOException e) {
+        } catch (IOException | JsonParseException e) {
 
-            // Falls Datei noch nicht existiert
+            // Lesen oder Umwandeln der Datei ist fehlgeschlagen.
+            // Die App startet trotzdem mit einem leeren Zustand.
+            e.printStackTrace();
+
             return new TodoApp();
         }
     }
