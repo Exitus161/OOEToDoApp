@@ -477,19 +477,17 @@ public class GUI {
 
         todoPanel.removeAll();
 
-        // Keine Liste ausgewählt
+        // Keine Liste ausgewählt.
         if (currentList == null) {
 
-            currentListLabel.setText("No list selected");
-
-            // Ohne ausgewählte Liste kann kein neuer Eintrag hinzugefügt werden.
-            addItemButton.setEnabled(false);
+            showNoListSelected();
 
             todoPanel.revalidate();
             todoPanel.repaint();
 
             return;
         }
+
 
         // Titel der aktuellen Liste anzeigen
         currentListLabel.setText(currentList.getTitle());
@@ -500,131 +498,7 @@ public class GUI {
 
         if (currentList instanceof CheckboxTodoList checkboxList) {
 
-            // Bei Checkbox-Listen werden neue Einträge über den Button hinzugefügt.
-            addItemButton.setEnabled(true);
-
-            // Layout für Checkbox-Liste zurücksetzen
-            todoPanel.removeAll();
-            todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
-
-            // Wenn die Checkbox-Liste leer ist,
-            // wird ein kurzer Hinweis angezeigt.
-            if (checkboxList.getItems().isEmpty()) {
-
-                JLabel emptyLabel = new JLabel("No tasks yet");
-                emptyLabel.setForeground(Color.GRAY);
-                emptyLabel.setBorder(BorderFactory.createEmptyBorder(12, 8, 12, 8));
-
-                todoPanel.add(emptyLabel);
-            }
-
-            for (TodoItem item : checkboxList.getItems()) {
-
-                JCheckBox checkBox = new JCheckBox(item.getText());
-
-                // Hinweis anzeigen, wenn der Benutzer mit der Maus über der Aufgabe bleibt.
-                checkBox.setToolTipText("Right-click to edit or delete");
-
-                checkBox.setSelected(item.isCompleted());
-
-                // Erledigte Tasks hervorheben
-                if (item.isCompleted()) {
-
-                    checkBox.setForeground(Color.GRAY);
-
-                    Font oldFont = checkBox.getFont();
-
-                    checkBox.setFont(
-                            oldFont.deriveFont(
-                                    oldFont.getStyle() | Font.ITALIC
-                            )
-                    );
-                }
-
-                // --------------------
-                // Rechtsklick
-                // --------------------
-
-                JPopupMenu popupMenu = new JPopupMenu();
-
-                JMenuItem editItem = new JMenuItem("Edit");
-                JMenuItem deleteItem = new JMenuItem("Delete");
-
-                popupMenu.add(editItem);
-                popupMenu.add(deleteItem);
-
-                checkBox.setComponentPopupMenu(popupMenu);
-
-                // Edit
-                editItem.addActionListener(e -> {
-
-                    String newText = (String) JOptionPane.showInputDialog(
-                            frame,
-                            "Edit task:",
-                            "Edit Task",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            null,
-                            item.getText()
-                    );
-
-                    if (newText != null && !newText.isBlank()) {
-
-                        // Leerzeichen am Anfang und Ende entfernen,
-                        // damit der bearbeitete Eintrag sauber gespeichert wird.
-                        newText = newText.trim();
-
-                        // Die GUI ändert das Item nicht direkt,
-                        // sondern gibt die Änderung an den Controller weiter.
-                        controller.editItem(item, newText);
-
-                        refreshTodoPanel();
-                    }
-
-                });
-
-                // Delete
-                deleteItem.addActionListener(e -> {
-
-                    // Vor dem Löschen nachfragen, damit Aufgaben nicht versehentlich entfernt werden.
-                    int confirm = JOptionPane.showConfirmDialog(
-                            frame,
-                            "Delete task \"" + item.getText() + "\"?",
-                            "Delete Task",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE
-                    );
-
-                    // Wenn der Benutzer nicht bestätigt,
-                    // wird die Aufgabe nicht gelöscht.
-                    if (confirm != JOptionPane.YES_OPTION) {
-                        return;
-                    }
-
-                    // Die GUI löscht das Item nicht direkt,
-                    // sondern gibt den Löschwunsch an den Controller weiter.
-                    controller.removeItem(checkboxList, item);
-
-                    refreshTodoPanel();
-                });
-
-                // Checkbox Event
-                checkBox.addActionListener(e -> {
-
-                    controller.toggleItem(checkboxList, item);
-
-                    refreshTodoPanel();
-                });
-
-                // Etwas Abstand um die Checkbox setzen.
-                checkBox.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
-
-                // Die Checkbox soll nur so hoch sein wie ihr Inhalt.
-                checkBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, checkBox.getPreferredSize().height + 8));
-
-                // Checkbox direkt zur Todo-Ansicht hinzufügen.
-                todoPanel.add(checkBox);
-            }
+            showCheckboxList(checkboxList);
         }
 
         // -----------------------------------
@@ -633,89 +507,245 @@ public class GUI {
 
         else if (currentList instanceof TextTodoList textList) {
 
-            textArea = new JTextArea();
-
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-
-            // Hinweis anzeigen, wenn der Benutzer mit der Maus über dem Textfeld bleibt.
-            textArea.setToolTipText("Write one note per line");
-
-            // Vorhandene Einträge anzeigen
-            StringBuilder builder = new StringBuilder();
-
-            for (String entry : textList.getEntries()) {
-                builder.append(entry).append("\n");
-            }
-
-            textArea.setText(builder.toString());
-
-            // Änderungen im Textfeld überwachen
-            textArea.getDocument().addDocumentListener(new DocumentListener() {
-
-                /**
-                 * Aktualisiert die Einträge im Model.
-                 */
-                private void updateEntries() {
-
-                    // Gesamten Text holen
-                    String text = textArea.getText();
-
-                    // Nach Zeilen trennen
-                    String[] lines = text.split("\n");
-
-                    // Neue Liste erzeugen
-                    java.util.List<String> entries = new java.util.ArrayList<>();
-
-                    for (String line : lines) {
-
-                        // Leerzeichen am Anfang und Ende entfernen,
-                        // damit jede Zeile sauber gespeichert wird.
-                        String cleanedLine = line.trim();
-
-                        // Leere Zeilen ignorieren.
-                        if (!cleanedLine.isEmpty()) {
-                            entries.add(cleanedLine);
-                        }
-
-                    }
-
-                    // Die GUI ersetzt die Einträge nicht direkt,
-                    // sondern gibt die neue Textliste an den Controller weiter.
-                    // Gespeichert wird später gesammelt, z. B. beim Beenden der App.
-                    controller.replaceTextEntries(textList, entries);
-                }
-
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    updateEntries();
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    updateEntries();
-                }
-
-                @Override
-                public void changedUpdate(DocumentEvent e) {
-                    updateEntries();
-                }
-            });
-
-            JScrollPane textScrollPane = new JScrollPane(textArea);
-
-            textScrollPane.setPreferredSize(new Dimension(400, 400));
-
-            todoPanel.setLayout(new BorderLayout());
-            todoPanel.add(textScrollPane, BorderLayout.CENTER);
-
-            // Cursor direkt ins Textfeld setzen,
-            // sobald Swing die Ansicht fertig aktualisiert hat.
-            SwingUtilities.invokeLater(() -> textArea.requestFocusInWindow());
+            showTextList(textList);
         }
 
         todoPanel.revalidate();
         todoPanel.repaint();
     }
 
+    /**
+     * Zeigt den Zustand an, wenn keine Liste ausgewählt ist.
+     */
+    private void showNoListSelected() {
+
+        // Text für den leeren Auswahlzustand setzen.
+        currentListLabel.setText("No list selected");
+
+        // Ohne ausgewählte Liste kann kein neuer Eintrag hinzugefügt werden.
+        addItemButton.setEnabled(false);
+    }
+
+    /**
+     * Zeigt eine Checkbox-Liste mit allen Aufgaben an.
+     */
+    private void showCheckboxList(CheckboxTodoList checkboxList) {
+
+        // Bei Checkbox-Listen werden neue Einträge über den Button hinzugefügt.
+        addItemButton.setEnabled(true);
+
+        // Layout für Checkbox-Listen setzen.
+        todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
+
+        // Wenn die Checkbox-Liste leer ist,
+        // wird ein kurzer Hinweis angezeigt.
+        if (checkboxList.getItems().isEmpty()) {
+
+            JLabel emptyLabel = new JLabel("No tasks yet");
+            emptyLabel.setForeground(Color.GRAY);
+            emptyLabel.setBorder(BorderFactory.createEmptyBorder(12, 8, 12, 8));
+
+            todoPanel.add(emptyLabel);
+        }
+
+        for (TodoItem item : checkboxList.getItems()) {
+
+            JCheckBox checkBox = new JCheckBox(item.getText());
+
+            // Hinweis anzeigen, wenn der Benutzer mit der Maus über der Aufgabe bleibt.
+            checkBox.setToolTipText("Right-click to edit or delete");
+
+            checkBox.setSelected(item.isCompleted());
+
+            // Erledigte Tasks hervorheben.
+            if (item.isCompleted()) {
+
+                checkBox.setForeground(Color.GRAY);
+
+                Font oldFont = checkBox.getFont();
+
+                checkBox.setFont(
+                        oldFont.deriveFont(
+                                oldFont.getStyle() | Font.ITALIC
+                        )
+                );
+            }
+
+            // Rechtsklick-Menü für die Aufgabe erstellen.
+            JPopupMenu popupMenu = new JPopupMenu();
+
+            JMenuItem editItem = new JMenuItem("Edit");
+            JMenuItem deleteItem = new JMenuItem("Delete");
+
+            popupMenu.add(editItem);
+            popupMenu.add(deleteItem);
+
+            checkBox.setComponentPopupMenu(popupMenu);
+
+            // Aufgabe bearbeiten.
+            editItem.addActionListener(e -> editCheckboxItem(item));
+
+            // Aufgabe löschen.
+            deleteItem.addActionListener(e -> deleteCheckboxItem(checkboxList, item));
+
+            // Checkbox-Status ändern.
+            checkBox.addActionListener(e -> {
+
+                controller.toggleItem(checkboxList, item);
+
+                refreshTodoPanel();
+            });
+
+            // Etwas Abstand um die Checkbox setzen.
+            checkBox.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+
+            // Die Checkbox soll nur so hoch sein wie ihr Inhalt.
+            checkBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, checkBox.getPreferredSize().height + 8));
+
+            // Checkbox direkt zur Todo-Ansicht hinzufügen.
+            todoPanel.add(checkBox);
+        }
+    }
+
+    /**
+     * Öffnet den Dialog zum Bearbeiten einer Checkbox-Aufgabe.
+     */
+    private void editCheckboxItem(TodoItem item) {
+
+        String newText = (String) JOptionPane.showInputDialog(
+                frame,
+                "Edit task:",
+                "Edit Task",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                null,
+                item.getText()
+        );
+
+        if (newText != null && !newText.isBlank()) {
+
+            // Leerzeichen am Anfang und Ende entfernen,
+            // damit der bearbeitete Eintrag sauber gespeichert wird.
+            newText = newText.trim();
+
+            // Die Änderung wird über den Controller ausgeführt.
+            controller.editItem(item, newText);
+
+            refreshTodoPanel();
+        }
+    }
+
+    /**
+     * Fragt nach Bestätigung und löscht danach eine Checkbox-Aufgabe.
+     */
+    private void deleteCheckboxItem(CheckboxTodoList checkboxList, TodoItem item) {
+
+        // Vor dem Löschen nachfragen, damit Aufgaben nicht versehentlich entfernt werden.
+        int confirm = JOptionPane.showConfirmDialog(
+                frame,
+                "Delete task \"" + item.getText() + "\"?",
+                "Delete Task",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        // Wenn der Benutzer nicht bestätigt,
+        // wird die Aufgabe nicht gelöscht.
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Die Aufgabe wird über den Controller gelöscht.
+        controller.removeItem(checkboxList, item);
+
+        refreshTodoPanel();
+    }
+
+    /**
+     * Zeigt eine Textliste als frei bearbeitbares Textfeld an.
+     */
+    private void showTextList(TextTodoList textList) {
+
+        // Textlisten werden direkt im Textfeld bearbeitet.
+        addItemButton.setEnabled(false);
+
+        textArea = new JTextArea();
+
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        // Hinweis anzeigen, wenn der Benutzer mit der Maus über dem Textfeld bleibt.
+        textArea.setToolTipText("Write one note per line");
+
+        // Vorhandene Einträge anzeigen.
+        StringBuilder builder = new StringBuilder();
+
+        for (String entry : textList.getEntries()) {
+            builder.append(entry).append("\n");
+        }
+
+        textArea.setText(builder.toString());
+
+        // Änderungen im Textfeld überwachen.
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+
+            /**
+             * Aktualisiert die Einträge im Model.
+             */
+            private void updateEntries() {
+
+                // Gesamten Text holen.
+                String text = textArea.getText();
+
+                // Nach Zeilen trennen.
+                String[] lines = text.split("\n");
+
+                // Neue Liste erzeugen.
+                java.util.List<String> entries = new java.util.ArrayList<>();
+
+                for (String line : lines) {
+
+                    // Leerzeichen am Anfang und Ende entfernen,
+                    // damit jede Zeile sauber gespeichert wird.
+                    String cleanedLine = line.trim();
+
+                    // Leere Zeilen ignorieren.
+                    if (!cleanedLine.isEmpty()) {
+                        entries.add(cleanedLine);
+                    }
+                }
+
+                // Die GUI ersetzt die Einträge nicht direkt,
+                // sondern gibt die neue Textliste an den Controller weiter.
+                // Gespeichert wird später gesammelt, z. B. beim Beenden der App.
+                controller.replaceTextEntries(textList, entries);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateEntries();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateEntries();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateEntries();
+            }
+        });
+
+        JScrollPane textScrollPane = new JScrollPane(textArea);
+
+        textScrollPane.setPreferredSize(new Dimension(400, 400));
+
+        todoPanel.setLayout(new BorderLayout());
+        todoPanel.add(textScrollPane, BorderLayout.CENTER);
+
+        // Cursor direkt ins Textfeld setzen,
+        // sobald Swing die Ansicht fertig aktualisiert hat.
+        SwingUtilities.invokeLater(() -> textArea.requestFocusInWindow());
+    }
 }
