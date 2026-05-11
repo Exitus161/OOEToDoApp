@@ -70,6 +70,9 @@ public class TodoController {
             return;
         }
 
+        // Leerzeichen am Anfang und Ende entfernen.
+        newTitle = newTitle.trim();
+
         // Der neue Titel wird direkt in der übergebenen Liste gespeichert.
         list.setTitle(newTitle);
 
@@ -86,6 +89,9 @@ public class TodoController {
         if (list == null || text == null || text.isBlank()) {
             return;
         }
+
+        // Leerzeichen am Anfang und Ende entfernen.
+        text = text.trim();
 
         // Neues Item zur Checkbox-Liste hinzufügen.
         list.addItem(text);
@@ -121,6 +127,9 @@ public class TodoController {
             return;
         }
 
+        // Leerzeichen am Anfang und Ende entfernen.
+        newText = newText.trim();
+
         // Der neue Text wird direkt im vorhandenen Item gespeichert.
         item.setText(newText);
 
@@ -154,6 +163,9 @@ public class TodoController {
         if (list == null || text == null || text.isBlank()) {
             return;
         }
+
+        // Leerzeichen am Anfang und Ende entfernen.
+        text = text.trim();
 
         // Der neue Text wird an die übergebene Freitext-Liste angehängt.
         list.addEntry(text);
