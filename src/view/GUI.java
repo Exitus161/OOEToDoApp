@@ -125,9 +125,13 @@ public class GUI {
 
                 TodoList list = app.getLists().get(selectedIndex);
 
-                String newTitle = JOptionPane.showInputDialog(
+                String newTitle = (String) JOptionPane.showInputDialog(
                         frame,
-                        "List name:",
+                        "New list name:",
+                        "Rename List",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        null,
                         list.getTitle()
                 );
 
@@ -293,7 +297,12 @@ public class GUI {
      */
     private void createNewList() {
 
-        String title = JOptionPane.showInputDialog("List name:");
+        String title = JOptionPane.showInputDialog(
+                frame,
+                "List name:",
+                "Create List",
+                JOptionPane.QUESTION_MESSAGE
+        );
 
         // Wenn der Benutzer abbricht oder nur Leerzeichen eingibt,
         // wird keine Liste erstellt.
@@ -365,7 +374,12 @@ public class GUI {
             return;
         }
 
-        String text = JOptionPane.showInputDialog("New Entry:");
+        String text = JOptionPane.showInputDialog(
+                frame,
+                "New task:",
+                "Add Task",
+                JOptionPane.QUESTION_MESSAGE
+        );
 
         // Wenn der Benutzer abbricht oder nur Leerzeichen eingibt,
         // wird kein neuer Eintrag erstellt.
@@ -504,9 +518,13 @@ public class GUI {
                 // Edit
                 editItem.addActionListener(e -> {
 
-                    String newText = JOptionPane.showInputDialog(
+                    String newText = (String) JOptionPane.showInputDialog(
                             frame,
                             "Edit task:",
+                            "Edit Task",
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            null,
                             item.getText()
                     );
 
