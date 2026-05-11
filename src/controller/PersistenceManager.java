@@ -26,8 +26,8 @@ public class PersistenceManager {
     // Vollständiger Speicherpfad innerhalb des Projekts.
     private static final String FILE_PATH = RESOURCE_DIRECTORY + File.separator + FILE_NAME;
 
-    // Gson Objekt
-    private Gson gson;
+    // Gson-Objekt für die JSON-Umwandlung.
+    private final Gson gson;
 
     /**
      * Konstruktor

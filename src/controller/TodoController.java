@@ -12,11 +12,11 @@ import model.TextTodoList;
  */
 public class TodoController {
 
-    // Referenz auf die gesamte Anwendung (alle Listen)
-    private TodoApp app;
+    // Referenz auf die gesamte Anwendung mit allen Listen.
+    private final TodoApp app;
 
-    // Verwaltet Speichern/Laden
-    private PersistenceManager persistenceManager;
+    // Verwaltet das Speichern und Laden der App-Daten.
+    private final PersistenceManager persistenceManager;
 
     /**
      * Konstruktor

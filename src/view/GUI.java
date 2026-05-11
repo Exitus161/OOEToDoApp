@@ -17,8 +17,11 @@ import javax.swing.event.DocumentListener;
  */
 public class GUI {
 
-    private TodoController controller;
-    private TodoApp app;
+    // Controller, über den die GUI Änderungen am Model ausführt.
+    private final TodoController controller;
+
+    // App-Model, aus dem die GUI Daten zur Anzeige liest.
+    private final TodoApp app;
 
     // Aktuell ausgewählte Liste
     private TodoList currentList;
