@@ -121,7 +121,7 @@ public class GUI {
 
                 String newTitle = JOptionPane.showInputDialog(
                         frame,
-                        "New List:",
+                        "List name:",
                         list.getTitle()
                 );
 
@@ -163,10 +163,25 @@ public class GUI {
                 // Index der Liste berechnen, die sich unter der Maus befindet.
                 int index = listOverview.locationToIndex(mousePosition);
 
-                // Nur gültige Indizes auswählen.
-                if (index >= 0) {
-                    listOverview.setSelectedIndex(index);
+                // Wenn kein gültiger Index gefunden wurde,
+                // wird keine Liste ausgewählt.
+                if (index < 0) {
+                    return;
                 }
+
+                // Bereich der gefundenen Listenzelle ermitteln.
+                Rectangle cellBounds = listOverview.getCellBounds(index, index);
+
+                // Wenn der Klick nicht wirklich innerhalb dieser Zelle liegt,
+                // wurde wahrscheinlich in einen leeren Bereich geklickt.
+                if (cellBounds == null || !cellBounds.contains(mousePosition)) {
+                    return;
+                }
+
+                // Nur wenn der Klick wirklich auf einer Liste lag,
+                // wird diese Liste ausgewählt.
+                listOverview.setSelectedIndex(index);
+
             }
 
             @Override
@@ -209,7 +224,7 @@ public class GUI {
         JScrollPane rightScrollPane = new JScrollPane(todoPanel);
 
         // Titel der aktuellen Liste
-        currentListLabel = new JLabel("Choose a List");
+        currentListLabel = new JLabel("No list selected");
         currentListLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         // Button zum Hinzufügen
@@ -287,7 +302,7 @@ public class GUI {
 
         int choice = JOptionPane.showOptionDialog(
                 frame,
-                "Which type of list?",
+                "Which type of list do you want to create?",
                 "New list",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -400,7 +415,7 @@ public class GUI {
         // Keine Liste ausgewählt
         if (currentList == null) {
 
-            currentListLabel.setText("No list chosen");
+            currentListLabel.setText("No list selected");
 
             todoPanel.revalidate();
             todoPanel.repaint();

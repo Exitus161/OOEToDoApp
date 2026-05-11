@@ -72,7 +72,7 @@ public class PersistenceManager {
                 // Leere Grundstruktur speichern.
                 save(new TodoApp());
 
-                System.out.println("Created new JSON File.");
+                System.out.println("New JSON file created.");
             }
 
         } catch (IOException e) {
@@ -93,7 +93,7 @@ public class PersistenceManager {
 
             gson.toJson(app, writer);
 
-            System.out.println("Data saved.");
+            System.out.println("Todo Data saved.");
 
         } catch (IOException e) {
 
@@ -127,7 +127,7 @@ public class PersistenceManager {
                 return new TodoApp();
             }
 
-            System.out.println("Data loaded.");
+            System.out.println("Todo data loaded.");
 
             return app;
 
