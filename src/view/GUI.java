@@ -453,9 +453,23 @@ public class GUI {
             todoPanel.removeAll();
             todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
 
+            // Wenn die Checkbox-Liste leer ist,
+            // wird ein kurzer Hinweis angezeigt.
+            if (checkboxList.getItems().isEmpty()) {
+
+                JLabel emptyLabel = new JLabel("No tasks yet");
+                emptyLabel.setForeground(Color.GRAY);
+                emptyLabel.setBorder(BorderFactory.createEmptyBorder(12, 8, 12, 8));
+
+                todoPanel.add(emptyLabel);
+            }
+
             for (TodoItem item : checkboxList.getItems()) {
 
                 JCheckBox checkBox = new JCheckBox(item.getText());
+
+                // Hinweis anzeigen, wenn der Benutzer mit der Maus über der Aufgabe bleibt.
+                checkBox.setToolTipText("Right-click to edit or delete");
 
                 checkBox.setSelected(item.isCompleted());
 
@@ -550,6 +564,9 @@ public class GUI {
 
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
+
+            // Hinweis anzeigen, wenn der Benutzer mit der Maus über dem Textfeld bleibt.
+            textArea.setToolTipText("Write one note per line");
 
             // Vorhandene Einträge anzeigen
             StringBuilder builder = new StringBuilder();
