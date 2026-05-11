@@ -16,9 +16,14 @@ public class TodoItem {
      * Standard: nicht erledigt
      */
     public TodoItem(String text) {
-        this.text = text;
+
+        // Text sauber speichern und null vermeiden.
+        this.text = cleanText(text);
+
+        // Neue Aufgaben sind standardmäßig nicht erledigt.
         this.completed = false;
     }
+
 
     /**
      * Wechselt den Status (erledigt <-> nicht erledigt)
@@ -35,13 +40,31 @@ public class TodoItem {
     }
 
     public void setText(String text) {
-        this.text = text;
+
+        // Text sauber speichern und null vermeiden.
+        this.text = cleanText(text);
     }
+
 
     /**
      * Gibt zurück, ob die Aufgabe erledigt ist
      */
     public boolean isCompleted() {
         return completed;
+    }
+
+    /**
+     * Bereitet Textwerte für TodoItems auf.
+     */
+    private String cleanText(String text) {
+
+        // Null-Werte werden als leerer Text gespeichert,
+        // damit später keine NullPointerException entsteht.
+        if (text == null) {
+            return "";
+        }
+
+        // Leerzeichen am Anfang und Ende entfernen.
+        return text.trim();
     }
 }
