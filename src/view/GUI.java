@@ -532,6 +532,10 @@ public class GUI {
                 // Zeilenpanel für eine einzelne Checkbox erstellen.
                 JPanel itemRow = new JPanel(new BorderLayout());
 
+                // Die Zeile soll nur so hoch sein wie ihr Inhalt.
+                // Dadurch verteilt BoxLayout die Einträge nicht über die ganze Höhe.
+                itemRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, checkBox.getPreferredSize().height + 8));
+
                 // Etwas Innenabstand setzen, damit die Zeile luftiger wirkt.
                 itemRow.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
 
