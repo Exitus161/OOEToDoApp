@@ -3,25 +3,31 @@ import controller.TodoController;
 import model.TodoApp;
 import view.GUI;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        // Persistenzmanager erstellen
-        PersistenceManager persistence = new PersistenceManager();
+        // Startet die Swing-Oberfläche auf dem dafür vorgesehenen UI-Thread.
+        SwingUtilities.invokeLater(() -> {
 
-        // Gespeicherte Daten laden
-        TodoApp app = persistence.load();
+            // Persistenzmanager erstellen.
+            PersistenceManager persistence = new PersistenceManager();
 
-        // Controller erstellen
-        TodoController controller = new TodoController(app, persistence);
+            // Gespeicherte Daten laden.
+            TodoApp app = persistence.load();
 
-        // GUI starten
-        new GUI(controller);
+            // Controller erstellen, der Model und Persistenz verbindet.
+            TodoController controller = new TodoController(app, persistence);
 
-        // Beim Beenden automatisch speichern
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            persistence.save(app);
-        }));
+            // GUI starten.
+            new GUI(controller);
+
+            // Beim Beenden automatisch den letzten Stand speichern.
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                persistence.save(app);
+            }));
+        });
     }
 }
