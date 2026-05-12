@@ -492,21 +492,12 @@ public class GUI {
         // Checkbox-Liste
         // -----------------------------------
 
-        if (currentList instanceof CheckboxTodoList checkboxList) {
-
-            controller.addItem(checkboxList, text);
-        }
-
-        // -----------------------------------
-        // Text-Liste
-        // -----------------------------------
-
+        // Neue Aufgabe nur bei Checkbox-Listen hinzufügen.
         if (currentList instanceof CheckboxTodoList checkboxList) {
 
             // Neue Aufgabe über den Controller hinzufügen.
             controller.addItem(checkboxList, text);
         }
-
         refreshTodoPanel();
     }
 

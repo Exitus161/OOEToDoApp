@@ -1,18 +1,29 @@
 {
   "lists": [
     {
-      "entries": [],
-      "title": "Freitext",
-      "type": "text"
-    },
-    {
       "items": [
         {
-          "text": "Wasser",
+          "text": "Test",
           "completed": false
         },
         {
-          "text": "Süßigkeiten",
+          "text": "Test",
+          "completed": false
+        },
+        {
+          "text": "Eier",
+          "completed": false
+        },
+        {
+          "text": "Milch",
+          "completed": false
+        },
+        {
+          "text": "Milch",
+          "completed": false
+        },
+        {
+          "text": "Eier",
           "completed": true
         }
       ],
