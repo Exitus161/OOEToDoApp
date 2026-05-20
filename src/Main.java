@@ -6,7 +6,7 @@ import view.GUI;
 import javax.swing.SwingUtilities;
 
 /**
- * Entry Point der ProtoBoard Todo-Anwendung.
+ * Entry Point der OOEToDoApp Todo-Anwendung.
  * 
  * Diese Klasse demonstriert das Model-View-Controller (MVC) Pattern mit 3-Schichten-Architektur.
  * Sie koordiniert die Initialisierung aller Komponenten in der korrekten Reihenfolge:
@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
 public class Main {
 
     /**
-     * Startet die ProtoBoard Todo-Anwendung.
+     * Startet die OOEToDoApp Todo-Anwendung.
      * 
      * Initialisiert alle Komponenten nach dem MVC-Pattern:
      * 1. Persistierung erstellen und Daten laden

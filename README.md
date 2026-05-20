@@ -1,6 +1,6 @@
-# ProtoBoard
+# OOEToDoApp
 
-ProtoBoard ist eine einfache Java-Swing-Anwendung zur Verwaltung von Todo-Listen. Die Anwendung unterstützt Checkbox-Listen für Aufgaben und Textlisten für freie Notizen.
+OOEToDoApp ist eine einfache Java-Swing-Anwendung zur Verwaltung von Todo-Listen. Die Anwendung unterstützt Checkbox-Listen für Aufgaben und Textlisten für freie Notizen.
 
 ## Funktionen
 
@@ -14,7 +14,7 @@ ProtoBoard ist eine einfache Java-Swing-Anwendung zur Verwaltung von Todo-Listen
 ## Projektstruktur
 
 ```text
-ProtoBoard-main/
+OOEToDoApp-main/
 ├── app/                 # Gebaute JAR-Datei und Laufzeitdaten
 │   ├── ToDo-Liste.jar
 │   └── resources/

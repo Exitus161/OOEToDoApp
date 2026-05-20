@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Collections;
 
 /**
- * Zentrale Model-Klasse der ProtoBoard Todo-Anwendung.
+ * Zentrale Model-Klasse der OOEToDoApp Todo-Anwendung.
  * 
  * Diese Klasse verwaltet alle Todo-Listen und ist das Herzstück des MVC-Patterns.
  * Sie agiert als Container für die gesamte Datenschicht und koordiniert

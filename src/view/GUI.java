@@ -107,7 +107,7 @@ public class GUI {
      */
     private void createFrame() {
 
-        frame = new JFrame("ProtoBoard");
+        frame = new JFrame("OOEToDoApp");
         frame.setSize(700, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
