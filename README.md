@@ -37,9 +37,9 @@ OOEToDoApp-main/
 - Java JDK 17 oder neuer
 - IntelliJ IDEA oder eine andere Java-IDE
 
-## Starten in IntelliJ
+## Starten in der IDE
 
-1. Projekt in IntelliJ öffnen.
+1. Projekt in der IDE öffnen.
 2. Sicherstellen, dass `lib/gson-2.13.2.jar` als Library eingebunden ist.
 3. `src/Main.java` ausführen.
 
