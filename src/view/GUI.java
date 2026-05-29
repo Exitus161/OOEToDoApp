@@ -24,36 +24,41 @@ import java.awt.event.WindowEvent;
  * 
  * Die GUI liest Daten aus dem {@link model.TodoApp}-Model und delegiert
  * Änderungen an den Controller. Dadurch wird das MVC-Pattern unterstützt.
+ * @see controller.TodoController
+ * @see model.TodoApp
  */
+
 public class GUI {
 
-    // Controller, über den die GUI Änderungen am Model ausführt.
-    private final TodoController controller;
+   /** Controller, über den die GUI Änderungen am Model ausführt. */
+private final TodoController controller;
 
-    // App-Model, aus dem die GUI Daten zur Anzeige liest.
-    private final TodoApp app;
+/** App-Model, aus dem die GUI Daten zur Anzeige liest. */
+private final TodoApp app;
 
-    // Aktuell ausgewählte Liste
-    private TodoList currentList;
+/** Aktuell in der rechten Ansicht angezeigte Liste. */
+private TodoList currentList;
 
-    // Swing Komponenten
-    private JFrame frame;
+/** Hauptfenster der Anwendung. */
+private JFrame frame;
 
-    // Linke Seitenleiste
-    private JList<String> listOverview;
-    private DefaultListModel<String> listModel;
+/** Listenübersicht der Todo-Listen in der linken Seitenleiste. */
+private JList<String> listOverview;
 
-    // Rechte Seite mit TodoItems
-    private JPanel todoPanel;
+/** Datenmodell für die Listenübersicht. */
+private DefaultListModel<String> listModel;
 
-    // Titel der aktuell ausgewählten Liste
-    private JLabel currentListLabel;
+/** Panel für die Darstellung der Todo-Items auf der rechten Seite. */
+private JPanel todoPanel;
 
-    // Eingabefeld für Textlisten
-    private JTextArea textArea;
+/** Label zur Anzeige des Titels der aktuell ausgewählten Liste. */
+private JLabel currentListLabel;
 
-    // Button zum Hinzufügen neuer Einträge.
-    private JButton addItemButton;
+/** Eingabefeld für freie Textlisten. */
+private JTextArea textArea;
+
+/** Button zum Hinzufügen neuer Todo-Items. */
+private JButton addItemButton;
 
     /**
      * Konstruktor.
